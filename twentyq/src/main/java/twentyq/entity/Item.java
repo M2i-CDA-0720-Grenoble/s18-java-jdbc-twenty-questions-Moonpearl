@@ -3,16 +3,16 @@ package twentyq.entity;
 import javax.persistence.*;
 
 @Entity
-@Table(name = "questions")
-public final class Question {
-
+@Table(name = "items")
+public final class Item {
+    
     @Id                     // Clé primaire
     @GeneratedValue         // Auto-incrément
     @Column(name = "id")    // Nom de la colonne en BDD (facultatif dès lors qu'il y a l'annotation @Id)
     private Integer id;
 
-    @Column(name = "text")
-    private String text;
+    @Column(name = "name")
+    private String name;
 
     @ManyToOne
     @JoinColumn(name = "parent_question_id")
@@ -29,12 +29,12 @@ public final class Question {
         this.id = id;
     }
 
-    public String getText() {
-        return text;
+    public String getName() {
+        return name;
     }
 
-    public void setText(String text) {
-        this.text = text;
+    public void setName(String name) {
+        this.name = name;
     }
 
     public Question getParentQuestion() {
