@@ -1,5 +1,8 @@
 package twentyq;
 
+import java.util.Scanner;
+import java.util.regex.Pattern;
+
 import javax.persistence.EntityManager;
 import javax.persistence.EntityManagerFactory;
 import javax.persistence.Persistence;
@@ -43,7 +46,26 @@ public final class App {
         // Efface la console
         new ProcessBuilder("cmd", "/c", "cls").inheritIO().start().waitFor();
         // Affiche la première question
-        System.out.println( firstQuestion.getText() );
+        System.out.println( firstQuestion.getText() + " [O/N]" );
+
+        // Crée un Scanner prêt à lire les saisies de l'utilisateur
+        Scanner scanner = new Scanner(System.in);
+
+        // Crée une boucle infinie
+        while (true) {
+            // Demande une saisie à l'utilisateur
+            String userInput = scanner.nextLine().trim().toUpperCase();
+            // Vérifie que la saisie de l'utilisateur correspond bien à exactement 1 caractère parmi: o, O, n ou N
+            if (Pattern.matches("^[oOnN]$", userInput)) {
+                
+            // Si la saisie de l'utilisateur n'est pas valide, affiche un avertissement
+            } else {
+                System.out.println("Vous devez répondre par (O)ui ou par (N)on!");
+            }
+        }
+
+        // Arrête l'application avec un code de succès
+        // System.exit(0);
 
     }
 }
