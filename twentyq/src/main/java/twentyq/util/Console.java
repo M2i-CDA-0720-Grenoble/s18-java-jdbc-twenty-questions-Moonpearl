@@ -21,6 +21,12 @@ public final class Console {
         return instance;
     }
 
+    public static String input()
+    {
+        Scanner scanner = getInstance().scanner;
+        return scanner.nextLine().trim();
+    }
+
     public static Boolean askYesOrNo()
     {
         Scanner scanner = getInstance().scanner;

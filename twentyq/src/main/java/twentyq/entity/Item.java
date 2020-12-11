@@ -7,7 +7,7 @@ import javax.persistence.*;
 public final class Item {
     
     @Id                     // Clé primaire
-    @GeneratedValue         // Auto-incrément
+    @GeneratedValue(strategy = GenerationType.IDENTITY)         // Auto-incrément
     @Column(name = "id")    // Nom de la colonne en BDD (facultatif dès lors qu'il y a l'annotation @Id)
     private Integer id;
 
