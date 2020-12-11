@@ -12,6 +12,7 @@ import javax.persistence.criteria.CriteriaBuilder;
 import javax.persistence.criteria.CriteriaQuery;
 import javax.persistence.criteria.Root;
 
+import twentyq.entity.Item;
 import twentyq.entity.Question;
 
 /**
@@ -66,6 +67,40 @@ public final class App {
                 } else {
                     answeredYes = false;
                 }
+
+                // Crée une interface permettant de construire une requête en base de données
+                CriteriaQuery<Item> itemQueryBuilder = builder.createQuery(Item.class);
+                // Ajoute une clause "SELECT * FROM" liée au nom de table défini dans la classe concernée
+                Root<Item> itemFrom = itemQueryBuilder.from(Item.class);
+                itemQueryBuilder.select(itemFrom);
+                // Ajoute une clause "WHERE...
+                itemQueryBuilder.where(
+                    // ... `parent_question_id` = ?" avec ? = l'ID de la question actuelle
+                    builder.equal( itemFrom.get("parentQuestion"), currentQuestion),
+                    // ... AND `parent_question_answer` = ?" avec ? = la réponse de l'utilisateur
+                    builder.equal( itemFrom.get("parentQuestionAnswer"), answeredYes)
+                );
+                // Crée la requête effective à partir de l'abstraction construite précédemment
+                TypedQuery<Item> itemQuery = manager.createQuery( itemQueryBuilder );
+                try {
+                    Item item = itemQuery.getSingleResult();
+
+                    System.out.println("Je propose: " + item.getName() + " [O/N]");
+
+                    // Demande une saisie à l'utilisateur
+                    userInput = scanner.nextLine().trim().toUpperCase();
+                    // Vérifie que la saisie de l'utilisateur correspond bien à exactement 1 caractère parmi: o, O, n ou N
+                    if (Pattern.matches("^[oOnN]$", userInput)) {
+
+                        if ( "O".equals(userInput) ) {
+                            System.out.println("J'ai trouvé! :)");
+                            break;
+                        }
+
+                    }
+
+                }
+                catch (NoResultException exception) { }
                 
                 // Crée une interface permettant de construire une requête en base de données
                 queryBuilder = builder.createQuery(Question.class);
@@ -95,6 +130,7 @@ public final class App {
             }
         }
 
+        scanner.close();
         // Arrête l'application avec un code de succès
         System.exit(0);
 
